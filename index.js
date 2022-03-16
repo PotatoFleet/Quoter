@@ -13,20 +13,12 @@ app.use(
   session({ resave: true, secret: "valorantvishal", saveUninitialized: true })
 );
 app.use(cors());
-app.use(function (_req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", api);
 app.use(express.static(path.join(__dirname, "build")));
 
-app.get("*", (_req, res) => {
+app.get("*", async (_req, res) => {
   await Quote.delete({ author: "unknown" });
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
