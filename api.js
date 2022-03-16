@@ -5,9 +5,9 @@ const express = require("express");
 const router = express.Router();
 const cors = require("cors");
 
-router.use(cors());
-
 let gsession;
+
+router.all("*", cors());
 
 router.get("/quotes", (req, res) => {
   if ("seen" in req.query) {
