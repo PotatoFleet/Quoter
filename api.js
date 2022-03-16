@@ -3,6 +3,7 @@ const User = require("./models/User");
 const Quote = require("./models/Quote");
 const express = require("express");
 const router = express.Router();
+const cors = require("cors");
 
 let gsession;
 

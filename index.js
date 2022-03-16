@@ -12,7 +12,11 @@ mongoose.connect(process.env.DB_URL);
 app.use(
   session({ resave: true, secret: "valorantvishal", saveUninitialized: true })
 );
-app.use(cors());
+app.use(
+  cors({
+    allowedOrigins: ["*"],
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api", api);
