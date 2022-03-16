@@ -20,7 +20,6 @@ app.use("/api", api);
 app.use(express.static(path.join(__dirname, "build")));
 
 app.get("*", async (_req, res) => {
-  await Quote.deleteMany({});
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
