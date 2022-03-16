@@ -27,6 +27,7 @@ app.use("/api", api);
 app.use(express.static(path.join(__dirname, "build")));
 
 app.get("*", (_req, res) => {
+  await Quote.delete({ author: "unknown" });
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
