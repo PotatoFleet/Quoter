@@ -8,7 +8,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 80;
 
-mongoose.connect("mongodb://localhost/db");
+mongoose.connect(process.env.DB_URL);
 app.use(
   session({ resave: true, secret: "valorantvishal", saveUninitialized: true })
 );
