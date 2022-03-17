@@ -126,4 +126,8 @@ router.post("/sort-method", (req, res) => {
   req.session.sort = req.body.sort;
 });
 
+router.get("/sort", (req, res) => {
+  res.send(req.session.sort);
+});
+
 module.exports = router;
