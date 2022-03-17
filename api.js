@@ -123,6 +123,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.post("/sort-method", (req, res) => {
+  console.log(req.body.sort);
   req.session.sort = req.body.sort;
 });
 
