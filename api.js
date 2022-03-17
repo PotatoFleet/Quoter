@@ -14,14 +14,26 @@ router.get("/quotes", (req, res) => {
       },
     }).then((data) => {
       let quotes = [];
-      for (let i = 0; i < 3 && data.length > 0; i++) {
+      for (let i = 0; i < 5 && data.length > 0; i++) {
         let idx = Math.floor(Math.random() * data.length);
         quotes.push(data[idx]);
         data.splice(idx, 1);
       }
       res.send(quotes);
     });
-  } else Quote.find({}).then((data) => res.send(data));
+  } else
+    Quote.find({}).then((data) => {
+      if (!req.session.sort) req.session.sort = "latest";
+      if (req.session.sort === "latest") {
+        res.send(data.reverse());
+      } else if (req.session.sort === "top") {
+        res.send(
+          data.sort((a, b) => {
+            a.likes - b.likes;
+          })
+        );
+      }
+    });
 });
 
 router.get("/logged-in", (req, res) => {
@@ -108,6 +120,10 @@ router.get("/logout", (req, res) => {
   } catch (e) {
     res.send(false);
   }
+});
+
+router.post("/sort-method", (req, res) => {
+  req.session.sort = req.body.sort;
 });
 
 module.exports = router;
