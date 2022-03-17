@@ -4,8 +4,6 @@ const Quote = require("./models/Quote");
 const express = require("express");
 const router = express.Router();
 
-let gsession;
-
 router.get("/quotes", (req, res) => {
   if ("seen" in req.query) {
     Quote.find({
@@ -26,13 +24,13 @@ router.get("/quotes", (req, res) => {
   } else Quote.find({}).then((data) => res.send(data));
 });
 
-router.get("/logged-in", (_req, res) => {
-  if (!gsession) {
+router.get("/logged-in", (req, res) => {
+  if (!req.session) {
     res.send(false);
     return;
   }
 
-  if (gsession.user) {
+  if (req.session.user) {
     res.send(true);
   } else {
     res.send(false);
@@ -40,7 +38,7 @@ router.get("/logged-in", (_req, res) => {
 });
 
 router.post("/like", async (req, _res) => {
-  const user = await User.findOne({ username: gsession.user });
+  const user = await User.findOne({ username: req.session.user });
   const quote = await Quote.findOne({ quote: req.body.quote });
   if (req.body.sign === 1) {
     quote.likes++;
@@ -54,9 +52,9 @@ router.post("/like", async (req, _res) => {
 });
 
 router.get("/liked", async (req, res) => {
-  if (!gsession || !gsession.user) res.send(false);
+  if (!req.session || !req.session.user) res.send(false);
   else {
-    const user = await User.findOne({ username: gsession.user });
+    const user = await User.findOne({ username: req.session.user });
     res.send(
       user.likedQuotes.includes(new mongoose.Types.ObjectId(req.query.quoteId))
     );
@@ -82,7 +80,6 @@ router.post("/user-found", async (req, res) => {
 router.post("/login", (req, res) => {
   req.session.user = req.body.username;
   req.session.save();
-  gsession = req.session;
   res.send(true);
 });
 
@@ -95,13 +92,18 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/post-quote", async (req, res) => {
-  const user = await User.findOne({ username: gsession.user });
+  const user = await User.findOne({ username: req.session.user });
   await new Quote({
     userId: user._id,
     quote: req.body.quote,
     author: req.body.author,
     likes: 0,
   }).save();
+});
+
+router.get("/logout", (req, _res) => {
+  delete req.session.user;
+  console.log(req.session);
 });
 
 module.exports = router;
