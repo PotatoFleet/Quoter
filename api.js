@@ -122,14 +122,12 @@ router.get("/logout", (req, res) => {
   }
 });
 
-router.post("/sort-method", (req, res) => {
-  console.log(req.body);
+router.post("/sort-method", (req, _res) => {
+  console.log("here: " + req.body);
   req.session.sort = req.body.sort;
 });
 
 router.get("/sort", (req, res) => {
-  if (!req.session.sort) req.session.sort = "latest";
-  console.log("Sort: ");
   console.log(req.session.sort);
   res.send(req.session.sort);
 });
