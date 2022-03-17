@@ -123,9 +123,8 @@ router.get("/logout", (req, res) => {
 });
 
 router.post("/sort-method", (req, res) => {
-  console.log("here: " + req.body.sort);
   req.session.sort = req.body.sort;
-  res.send("set");
+  res.send(true);
 });
 
 router.get("/sort", (req, res) => {
