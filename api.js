@@ -101,9 +101,13 @@ router.post("/post-quote", async (req, res) => {
   }).save();
 });
 
-router.get("/logout", (req, _res) => {
-  delete req.session.user;
-  console.log(req.session);
+router.get("/logout", (req, res) => {
+  try {
+    delete req.session.user;
+    res.send(true);
+  } catch (e) {
+    res.send(false);
+  }
 });
 
 module.exports = router;
